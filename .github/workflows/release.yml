@@ -13,7 +13,6 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         target: 
-          - x86_64-unknown-linux-gnu
           - x86_64-apple-darwin
           - x86_64-pc-windows-gnu
           
@@ -64,14 +63,6 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset (Linux)
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/x86_64-unknown-linux-gnu/release/gcs
-          asset_name: gcs
-          asset_content_type: application/octet-stream
 
       - name: Upload Release Asset (macOS)
         uses: actions/upload-release-asset@v1
