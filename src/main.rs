@@ -61,7 +61,6 @@ fn print_commit_stats(commits: Vec<String>, should_sort: &bool) {
         commit_stats.sort_by(|a, b| b.2.cmp(&a.2)); // 按插入行数降序排序
     }
 
-    let mut total_files = 0;
     let mut total_added = 0;
     let mut total_deleted = 0;
 
@@ -72,14 +71,13 @@ fn print_commit_stats(commits: Vec<String>, should_sort: &bool) {
             commit, added, deleted, files_changed,
         );
 
-        total_files += files_changed;
         total_added += added;
         total_deleted += deleted;
     }
 
     println!(
-        "Total: {} insertions(+), {} deletions(-) , {} files changed",
-        total_added, total_deleted, total_files
+        "Total: {} insertions(+), {} deletions(-)",
+        total_added, total_deleted
     );
 }
 
