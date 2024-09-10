@@ -2,8 +2,7 @@ name: Build and Release CLI
 
 on:
   push:
-    tags:
-      - 'v*'  # 当推送带有 v* 前缀的 tag 时触发工作流
+    branches: [master]
 
 jobs:
   release:
