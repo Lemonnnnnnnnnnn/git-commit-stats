@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest, windows-latest]
         target: 
           - x86_64-unknown-linux-gnu
           - x86_64-apple-darwin
@@ -21,6 +21,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry
+
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -28,17 +36,8 @@ jobs:
           target: ${{ matrix.target }}
           override: true
 
-      - name: Install cross (for Linux builds)
-        if: matrix.os == 'ubuntu-latest'
-        run: cargo install cross
-
-      - name: Build with cargo (or cross for Linux)
-        run: |
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            cross build --release --target ${{ matrix.target }}
-          else
-            cargo build --release --target ${{ matrix.target }}
-          fi
+      - name: Build with cargo
+        run: cargo build --release --target ${{ matrix.target }}
 
       - name: Upload binary artifact
         uses: actions/upload-artifact@v3
@@ -71,7 +70,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: target/x86_64-unknown-linux-gnu/release/gcs
-          asset_name: your-cli-linux
+          asset_name: gcs
           asset_content_type: application/octet-stream
 
       - name: Upload Release Asset (macOS)
@@ -79,7 +78,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: target/x86_64-apple-darwin/release/gcs
-          asset_name: your-cli-macos
+          asset_name: gcs
           asset_content_type: application/octet-stream
 
       - name: Upload Release Asset (Windows)
@@ -87,5 +86,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: target/x86_64-pc-windows-gnu/release/gcs.exe
-          asset_name: your-cli-windows.exe
+          asset_name: gcs.exe
           asset_content_type: application/octet-stream
