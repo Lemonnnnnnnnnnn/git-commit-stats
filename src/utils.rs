@@ -89,12 +89,12 @@ pub fn print_commit_stats(commit_stats: Vec<Commit>) {
 
     for commit in commit_stats {
         println!(
-            "Commit {}: {}, {} insertions(+), {} deletions(-),{} files changed",
+            "Commit {}:, {} insertions(+), {} deletions(-),{} files changed , hash: {}",
             commit.commit_msg,
-            commit.commit_hash,
             commit.added,
             commit.deleted,
             commit.files_changed,
+            commit.commit_hash,
         );
 
         total_added += commit.added;
