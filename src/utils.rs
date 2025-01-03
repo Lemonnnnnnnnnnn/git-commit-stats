@@ -7,7 +7,7 @@ pub struct Commit {
     files_changed: usize,
     added: usize,
     deleted: usize,
-    commit_msg: String,  // 新增的 commit_msg 字段
+    commit_msg: String, // 新增的 commit_msg 字段
 }
 
 pub fn get_commits(keyword: &str, exclude_merge: &bool) -> Vec<Commit> {
@@ -30,7 +30,7 @@ pub fn get_commits(keyword: &str, exclude_merge: &bool) -> Vec<Commit> {
         .map(|commit| {
             let parts: Vec<&str> = commit.splitn(2, ' ').collect();
             let commit_hash = parts[0].to_string();
-            let commit_msg = parts.get(1).unwrap_or(&"").to_string();  // 获取提交消息
+            let commit_msg = parts.get(1).unwrap_or(&"").to_string(); // 获取提交消息
             let (files_changed, added, deleted) = calculate_diff_info(&commit_hash);
             Commit {
                 commit_hash,
@@ -90,7 +90,11 @@ pub fn print_commit_stats(commit_stats: Vec<Commit>) {
     for commit in commit_stats {
         println!(
             "Commit {}: {}, {} insertions(+), {} deletions(-),{} files changed",
-            commit.commit_hash, commit.commit_msg,commit.added, commit.deleted, commit.files_changed,
+            commit.commit_msg,
+            commit.commit_hash,
+            commit.added,
+            commit.deleted,
+            commit.files_changed,
         );
 
         total_added += commit.added;
@@ -112,14 +116,14 @@ mod tests {
         let keyword = "README";
         let exclude_merge = true;
         let expected_commit_id = "cd13ae5251d6aaf12e4497d6285a6aa1b507eb42";
-        let expected_commit_msg = "feat: README";  // 假设这是提交消息
+        let expected_commit_msg = "feat: README"; // 假设这是提交消息
 
         let commits = get_commits(keyword, &exclude_merge);
         assert!(!commits.is_empty());
 
         let expected_commit = Commit {
             commit_hash: expected_commit_id.to_string(),
-            commit_msg: expected_commit_msg.to_string(),  // 检查提交消息
+            commit_msg: expected_commit_msg.to_string(), // 检查提交消息
             files_changed: 1,
             added: 99,
             deleted: 0,
@@ -152,21 +156,21 @@ mod tests {
                 files_changed: 2,
                 added: 10,
                 deleted: 5,
-                commit_msg: "commit1".to_string()
+                commit_msg: "commit1".to_string(),
             },
             Commit {
                 commit_hash: "commit2".to_string(),
                 files_changed: 3,
                 added: 50,
                 deleted: 10,
-                commit_msg: "commit2".to_string()
+                commit_msg: "commit2".to_string(),
             },
             Commit {
                 commit_hash: "commit3".to_string(),
                 files_changed: 1,
                 added: 30,
                 deleted: 2,
-                commit_msg: "commit3".to_string()
+                commit_msg: "commit3".to_string(),
             },
         ];
 
